@@ -46,20 +46,41 @@ function renderNewProjects(list) {
     });
 }
 
+// Function to toggle service dropdown
+function toggleServiceDropdown(id) {
+    const el = document.getElementById(id);
+    if (el) {
+        el.style.display = (el.style.display === 'block') ? 'none' : 'block';
+    }
+}
+
+// Initialize AOS library
+AOS.init({ once: true });
+
+// Testimonials slider
+let testimonialIndex = 0;
+const testimonials = document.querySelectorAll('.testimonial');
+if (testimonials.length > 0) {
+    testimonials[0].classList.add('active');
+    setInterval(() => {
+        testimonials.forEach((t) => t.classList.remove('active'));
+        testimonialIndex = (testimonialIndex + 1) % testimonials.length;
+        testimonials[testimonialIndex].classList.add('active');
+    }, 3500);
+}
 
 document.addEventListener('DOMContentLoaded', () => {
     // Check if properties array exists
     if (typeof properties !== 'undefined') {
-    const rentProperties = properties.filter(p => p.status === 'rent');
-    const buyProperties = properties.filter(p => p.status === 'buy');
-    const newProjects = properties.slice(-3); // Get last 3 properties as "new"
+        const rentProperties = properties.filter(p => p.status === 'rent');
+        const buyProperties = properties.filter(p => p.status === 'buy');
+        const newProjects = properties.slice(-3);
 
-        // Check if the containers exist before rendering
         if (document.getElementById('rentPropertyList')) {
-            renderRentCards(rentProperties.slice(0,3));
+            renderRentCards(rentProperties.slice(0, 3));
         }
         if (document.getElementById('buyPropertyList')) {
-            renderBuyCards(buyProperties.slice(0,3));
+            renderBuyCards(buyProperties.slice(0, 3));
         }
         if (document.getElementById('newProjectsList')) {
             renderNewProjects(newProjects);
@@ -71,7 +92,7 @@ document.addEventListener('DOMContentLoaded', () => {
         contactForm.addEventListener('submit', function(e) {
             e.preventDefault();
             const contactResponse = document.getElementById('contactResponse');
-            if(contactResponse) {
+            if (contactResponse) {
                 contactResponse.textContent = 'Thank you for contacting us! We will get back to you soon.';
             }
             this.reset();
@@ -82,24 +103,55 @@ document.addEventListener('DOMContentLoaded', () => {
     const goToTopBtn = document.getElementById("goToTopBtn");
     const header = document.querySelector('header');
 
-    window.onscroll = function() {
-        // Go to top button visibility
-        if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
-            goToTopBtn.style.display = "block";
-        } else {
-            goToTopBtn.style.display = "none";
-        }
+    if (goToTopBtn) {
+        window.onscroll = function() {
+            if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                goToTopBtn.style.display = "block";
+            } else {
+                goToTopBtn.style.display = "none";
+            }
 
-        // Sticky header
-        if (document.body.scrollTop > 50 || document.documentElement.scrollTop > 50) {
-            header.classList.add("scrolled");
-        } else {
-            header.classList.remove("scrolled");
-        }
-    };
+            if (header) {
+                if (document.body.scrollTop > 50 || document.documentElement.scrollTop > 50) {
+                    header.classList.add("scrolled");
+                } else {
+                    header.classList.remove("scrolled");
+                }
+            }
+        };
 
-    goToTopBtn.addEventListener('click', () => {
-        document.body.scrollTop = 0; // For Safari
-        document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
-    });
+        goToTopBtn.addEventListener('click', () => {
+            document.body.scrollTop = 0;
+            document.documentElement.scrollTop = 0;
+        });
+    }
+
+    // Animated counters
+    function animateCounter(counter) {
+        const target = +counter.getAttribute('data-target');
+        let count = 0;
+        const increment = Math.ceil(target / 60);
+        function update() {
+            count += increment;
+            if (count > target) count = target;
+            counter.textContent = count;
+            if (count < target) requestAnimationFrame(update);
+        }
+        update();
+    }
+    document.querySelectorAll('.counter').forEach(animateCounter);
+
+    // Ensure header is not transparent
+    if (header) {
+        header.classList.remove('transparent');
+    }
+
+    // Mobile menu toggle
+    const menuToggle = document.querySelector('.menu-toggle');
+    const nav = document.querySelector('nav');
+    if (menuToggle && nav) {
+        menuToggle.addEventListener('click', () => {
+            nav.classList.toggle('open');
+        });
+    }
 });
