@@ -5,6 +5,7 @@ body {
     margin: 0;
     background: var(--white);
     color: var(--text-dark);
+    padding-top: 80px; /* Added padding to offset fixed header */
 }
 header {
     background: #1976d2; /* Solid blue background */
@@ -14,8 +15,10 @@ header {
     justify-content: space-between;
     align-items: center;
     box-shadow: 0 2px 8px rgba(37,99,235,0.08);
-    position: sticky;
+    position: fixed; /* Changed to fixed */
     top: 0;
+    left: 0;
+    right: 0;
     z-index: 100;
     transition: box-shadow 0.2s;
 }
@@ -58,7 +61,7 @@ nav a:hover, nav a.active {
         position: absolute;
         top: 60px;
         right: 0;
-        background: #0a3b6b; /* Ensure consistent blue background on smaller screens */
+        background: #1976d2; /* Ensure consistent blue background on smaller screens */
         width: 200px;
         box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
         display: none;
